@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Cost of Scrolling</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #4a4a4a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      color: #333;
+    }
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      max-width: 500px;
+      width: 100%;
+    }
+    h1 { text-align: center; color: #2c3e50; }
+    .input-group { margin-bottom: 1rem; }
+    label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover { background-color: #e74c3c; }
+
+    #results {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 2px solid #eee;
+      display: none;
+    }
+    .stat-box {
+      background: #eef2f3;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    .stat-number { font-size: 1.5rem; font-weight: bold; color: #e74c3c; }
+    .stat-label { font-size: 0.9rem; color: #666; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>The Cost of Scrolling</h1>
+  <!-- <p style="text-align:center; color:#666;">See what your screen time is costing you.</p> -->
+
+  <div class="input-group">
+    <label for="age">Current Age</label>
+    <input type="number" id="age" placeholder="e.g., 25">
+  </div>
+
+  <div class="input-group">
+    <label for="hours">Phone Time per Day (Hours)</label>
+    <input type="number" id="hours" placeholder="e.g., 4">
+  </div>
+
+  <div class="input-group">
+    <label for="wage">Hypothetical Hourly Wage ($)</label>
+    <input type="number" id="wage" value="20">
+  </div>
+
+  <button onclick="calculateStats()">Calculate Future</button>
+
+  <div id="results">
+    <h3>Before you turn 80, you will spend:</h3>
+
+    <div class="stat-box">
+      <div class="stat-number" id="res-hours">0</div>
+      <div class="stat-label">Hours on Phone</div>
+    </div>
+
+    <div class="stat-box">
+      <div class="stat-number" id="res-days">0</div>
+      <div class="stat-label">Days</div>
+    </div>
+
+    <div class="stat-box">
+      <div class="stat-number" id="res-years">0</div>
+      <div class="stat-label">Years</div>
+    </div>
+
+    <h3>Which is equivalent to:</h3>
+
+    <div class="stat-box">
+      <div class="stat-number" id="res-money">$0</div>
+      <div class="stat-label">Earned (Pre-tax)</div>
+    </div>
+
+    <div class="stat-box">
+      <div class="stat-number" id="res-lang">0</div>
+      <div class="stat-label">Languages Learned (Fluent)</div>
+    </div>
+
+    <div class="stat-box">
+      <div class="stat-number" id="res-degree">0</div>
+      <div class="stat-label">Bachelor's Degrees Earned</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function calculateStats() {
+
+    const age = parseFloat(document.getElementById('age').value);
+    const dailyHours = parseFloat(document.getElementById('hours').value);
+    const hourlyWage = parseFloat(document.getElementById('wage').value);
+
+    if (!age || !dailyHours) {
+      alert("Please enter your age and phone usage.");
+      return;
+    }
+
+
+    const lifeExpectancy = 80;
+    const yearsLeft = lifeExpectancy - age;
+    const hoursPerLanguage = 600;
+    const hoursPerDegree = 5400;
+
+    if (yearsLeft <= 0) {
+      alert("Congrats on making it past 80! This calculator looks at time remaining up to age 80. In a way, you're so old that you broke the calculator!");
+      return;
+    }
+
+
+    const daysLeft = yearsLeft * 365;
+    const totalPhoneHours = Math.floor(daysLeft * dailyHours);
+    const totalPhoneDays = Math.floor(totalPhoneHours / 24);
+    const totalPhoneYears = (totalPhoneDays / 365).toFixed(1);
+
+    const moneyLost = totalPhoneHours * hourlyWage;
+    const languages = (totalPhoneHours / hoursPerLanguage).toFixed(1);
+    const degrees = (totalPhoneHours / hoursPerDegree).toFixed(1);
+
+    document.getElementById('res-hours').innerText = totalPhoneHours.toLocaleString();
+    document.getElementById('res-days').innerText = totalPhoneDays.toLocaleString();
+    document.getElementById('res-years').innerText = totalPhoneYears.toLocaleString();
+    document.getElementById('res-money').innerText = "$" + moneyLost.toLocaleString();
+    document.getElementById('res-lang').innerText = languages;
+    document.getElementById('res-degree').innerText = degrees;
+
+    document.getElementById('results').style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
